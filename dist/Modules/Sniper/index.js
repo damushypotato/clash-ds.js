@@ -4,8 +4,7 @@ const fastest_levenshtein_1 = require("fastest-levenshtein");
 const CrApi_1 = require("../CrApi");
 var Sniper;
 (function (Sniper) {
-    const api_key = process.env['CR_API_KEY'];
-    Sniper.Snipe = async (name, clan) => {
+    Sniper.Snipe = async (api_key, name, clan) => {
         const start = Date.now();
         const clans = (await CrApi_1.default.get(api_key, `clans?name=${encodeURIComponent(clan)}&limit=20`)).data.items;
         if (clans.length == 0)

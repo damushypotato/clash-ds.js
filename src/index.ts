@@ -1,14 +1,27 @@
-import { existsSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 const devPath = join(__dirname, '..', 'dev');
 const dev = existsSync(devPath);
-if (dev) {
-    require('dotenv').config({ path: join(devPath, 'dev.env') });
-}
 import { prompt } from 'inquirer';
 import Sniper from './Modules/Sniper';
 
 (async function init() {
+    const keyPath = dev ? join(devPath, 'key.txt') : 'key.txt';
+    let key: string;
+    if (existsSync(keyPath)) {
+        key = readFileSync(keyPath).toString();
+    } else {
+        const { key_ }: { key_: string } = await prompt([
+            {
+                type: 'input',
+                name: 'key_',
+                message: 'API Key not found. Please enter it here:',
+            },
+        ]);
+        key = key_;
+        writeFileSync(keyPath, key_);
+    }
+
     const { name, clan }: { name: string; clan: string } = await prompt([
         {
             type: 'input',
@@ -22,7 +35,7 @@ import Sniper from './Modules/Sniper';
         },
     ]);
 
-    const snipe = await Sniper.Snipe(name, clan);
+    const snipe = await Sniper.Snipe(key, name, clan);
 
     if (!snipe) {
         return console.log('Snipe failed.');

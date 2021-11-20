@@ -1,15 +1,13 @@
-import { closest, distance } from 'fastest-levenshtein';
+import { closest } from 'fastest-levenshtein';
 import CrApi from '../CrApi';
 import { PlayerData } from '../../Typings/ClashRoyale/Player';
 
 namespace Sniper {
-    const api_key = process.env['CR_API_KEY'];
-
     interface SnipeData {
         player: PlayerData;
         time: Number;
     }
-    export const Snipe = async (name: string, clan: string): Promise<SnipeData | void> => {
+    export const Snipe = async (api_key: string, name: string, clan: string): Promise<SnipeData | void> => {
         const start = Date.now();
 
         const clans: any[] = (await CrApi.get(api_key, `clans?name=${encodeURIComponent(clan)}&limit=20`)).data.items;

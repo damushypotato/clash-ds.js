@@ -4,12 +4,25 @@ const fs_1 = require("fs");
 const path_1 = require("path");
 const devPath = (0, path_1.join)(__dirname, '..', 'dev');
 const dev = (0, fs_1.existsSync)(devPath);
-if (dev) {
-    require('dotenv').config({ path: (0, path_1.join)(devPath, 'dev.env') });
-}
 const inquirer_1 = require("inquirer");
 const Sniper_1 = require("./Modules/Sniper");
 (async function init() {
+    const keyPath = dev ? (0, path_1.join)(devPath, 'key.txt') : 'key.txt';
+    let key;
+    if ((0, fs_1.existsSync)(keyPath)) {
+        key = (0, fs_1.readFileSync)(keyPath).toString();
+    }
+    else {
+        const { key_ } = await (0, inquirer_1.prompt)([
+            {
+                type: 'input',
+                name: 'key_',
+                message: 'API Key not found. Please enter it here:',
+            },
+        ]);
+        key = key_;
+        (0, fs_1.writeFileSync)(keyPath, key_);
+    }
     const { name, clan } = await (0, inquirer_1.prompt)([
         {
             type: 'input',
@@ -22,7 +35,7 @@ const Sniper_1 = require("./Modules/Sniper");
             message: 'Clan name:',
         },
     ]);
-    const snipe = await Sniper_1.default.Snipe(name, clan);
+    const snipe = await Sniper_1.default.Snipe(key, name, clan);
     if (!snipe) {
         return console.log('Snipe failed.');
     }
