@@ -49,11 +49,13 @@ export interface IconUrls {
     medium: string;
 }
 
+export type Level = 14 | 13 | 12 | 11 | 10 | 9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1;
+export type MaxLevel = 14 | 12 | 9 | 6 | 4;
 export interface Card {
     name: string;
     id: number;
-    level: number;
-    maxLevel: number;
+    level: Level;
+    maxLevel: MaxLevel;
     count: number;
     iconUrls: IconUrls;
 }

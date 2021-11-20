@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "axios": "^0.24.0",
+        "chalk": "^4.1.2",
         "fastest-levenshtein": "^1.0.12",
         "inquirer": "^8.2.0"
     }

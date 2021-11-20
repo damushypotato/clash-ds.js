@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 namespace CrApi {
     const baseURL = 'https://proxy.royaleapi.dev/v1/';
 
-    export const get = async (key: string, endpoint: string): Promise<AxiosResponse | void> => {
+    export const Get = async (key: string, endpoint: string): Promise<AxiosResponse | void> => {
         let res: AxiosResponse;
         try {
             res = await axios({

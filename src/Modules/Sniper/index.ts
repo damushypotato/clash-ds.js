@@ -11,7 +11,7 @@ namespace Sniper {
     export const Snipe = async (api_key: string, name: string, clan: string): Promise<SnipeData | void> => {
         const start = Date.now();
 
-        const clanReq = await CrApi.get(api_key, `clans?name=${encodeURIComponent(clan)}&limit=20`);
+        const clanReq = await CrApi.Get(api_key, `clans?name=${encodeURIComponent(clan)}&limit=20`);
         if (!clanReq) return;
         const clans: any[] = clanReq.data.items;
         if (clans.length == 0) return;
@@ -21,7 +21,7 @@ namespace Sniper {
         );
         const cMatches = clans.filter((c) => c.name == cRes);
 
-        const members_clanReqs = cMatches.map((c) => CrApi.get(api_key, `clans/${encodeURIComponent(c.tag)}`));
+        const members_clanReqs = cMatches.map((c) => CrApi.Get(api_key, `clans/${encodeURIComponent(c.tag)}`));
 
         const membersReq = await Promise.all(members_clanReqs);
 
@@ -43,7 +43,7 @@ namespace Sniper {
 
         const time = Date.now() - start;
 
-        const req = await CrApi.get(api_key, `players/${encodeURIComponent(nMatch.tag)}`);
+        const req = await CrApi.Get(api_key, `players/${encodeURIComponent(nMatch.tag)}`);
 
         if (!req) {
             return;

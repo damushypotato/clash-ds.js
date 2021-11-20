@@ -4,6 +4,8 @@ const devPath = join(__dirname, '..', 'dev');
 const dev = existsSync(devPath);
 import { prompt } from 'inquirer';
 import Sniper from './Modules/Sniper';
+import { greenBright, blue, yellow } from 'chalk';
+import CardParser from './Modules/CardParser';
 
 (async function init() {
     const keyPath = dev ? join(devPath, 'key.txt') : 'key.txt';
@@ -38,12 +40,19 @@ import Sniper from './Modules/Sniper';
     const snipe = await Sniper.Snipe(key, name, clan);
 
     if (snipe) {
-        console.log(`Sniped in ${snipe.time}ms`);
-        console.log(`Player: ${snipe.player.name} | Clan: ${snipe.player.clan?.name || '🚫 No clan'} | Trophies: ${snipe.player.trophies},`);
-        console.log(snipe.player.currentDeck.map((c) => c.name).join(', '));
+        const str = `
+Sniped in ${greenBright(`${snipe.time}ms`)}
+
+Player: ${blue(snipe.player.name)} | Clan: ${blue(snipe.player.clan?.name || 'No clan')} | Trophies: ${yellow(snipe.player.trophies)}
+
+Deck:
+
+${CardParser.ParseDeck(snipe.player.currentDeck)}
+`;
+        console.log(str);
     } else {
         console.log(
-            "Snipe failed. Maybe the clan/player wasn't found, or there was an API error. Make sure the name and clan name are more than 3 characters long, and also that the API Key in key.txt is correct."
+            "Snipe failed. Maybe the clan/player wasn't found, or there was an API error. Make sure the clan name is more than 3 characters long, and also that the API Key in key.txt is correct."
         );
     }
 
