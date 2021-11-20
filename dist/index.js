@@ -36,12 +36,14 @@ const Sniper_1 = require("./Modules/Sniper");
         },
     ]);
     const snipe = await Sniper_1.default.Snipe(key, name, clan);
-    if (!snipe) {
-        return console.log('Snipe failed.');
+    if (snipe) {
+        console.log(`Sniped in ${snipe.time}ms`);
+        console.log(`Player: ${snipe.player.name} | Clan: ${snipe.player.clan?.name || '🚫 No clan'} | Trophies: ${snipe.player.trophies},`);
+        console.log(snipe.player.currentDeck.map((c) => c.name).join(', '));
     }
-    console.log(`Sniped in ${snipe.time}ms`);
-    console.log(`Player: ${snipe.player.name} | Clan: ${snipe.player.clan?.name || '🚫 No clan'} | Trophies: ${snipe.player.trophies},`);
-    console.log(snipe.player.currentDeck.map((c) => c.name).join(', '));
+    else {
+        console.log("Snipe failed. Maybe the clan/player wasn't found, or there was an API error. Make sure the name and clan name are more than 3 characters long, and also that the API Key in key.txt is correct.");
+    }
     const { again } = await (0, inquirer_1.prompt)([
         {
             type: 'confirm',

@@ -1,6 +1,7 @@
 import { closest } from 'fastest-levenshtein';
 import CrApi from '../CrApi';
 import { PlayerData } from '../../Typings/ClashRoyale/Player';
+import { AxiosResponse } from 'axios';
 
 namespace Sniper {
     interface SnipeData {
@@ -10,7 +11,9 @@ namespace Sniper {
     export const Snipe = async (api_key: string, name: string, clan: string): Promise<SnipeData | void> => {
         const start = Date.now();
 
-        const clans: any[] = (await CrApi.get(api_key, `clans?name=${encodeURIComponent(clan)}&limit=20`)).data.items;
+        const clanReq = await CrApi.get(api_key, `clans?name=${encodeURIComponent(clan)}&limit=20`);
+        if (!clanReq) return;
+        const clans: any[] = clanReq.data.items;
         if (clans.length == 0) return;
         const cRes = closest(
             clan,
@@ -18,12 +21,16 @@ namespace Sniper {
         );
         const cMatches = clans.filter((c) => c.name == cRes);
 
-        const clanReqs = cMatches.map((c) => CrApi.get(api_key, `clans/${encodeURIComponent(c.tag)}`));
+        const members_clanReqs = cMatches.map((c) => CrApi.get(api_key, `clans/${encodeURIComponent(c.tag)}`));
 
-        const membersReq = await Promise.all(clanReqs);
+        const membersReq = await Promise.all(members_clanReqs);
+
+        for (const mr in membersReq) {
+            if (!membersReq[mr]) return;
+        }
 
         let allMembers = [];
-        membersReq.forEach((c) => allMembers.push(...c.data.memberList));
+        membersReq.forEach((c) => allMembers.push(...(c as AxiosResponse).data.memberList));
 
         const nRes = closest(
             name,
@@ -36,7 +43,13 @@ namespace Sniper {
 
         const time = Date.now() - start;
 
-        const player: PlayerData = (await CrApi.get(api_key, `players/${encodeURIComponent(nMatch.tag)}`)).data;
+        const req = await CrApi.get(api_key, `players/${encodeURIComponent(nMatch.tag)}`);
+
+        if (!req) {
+            return;
+        }
+
+        const player: PlayerData = req.data;
 
         return {
             player,
