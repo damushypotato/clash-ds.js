@@ -1,6 +1,7 @@
 import { Card, MaxLevel, Level } from '../../Typings/ClashRoyale/Player';
 import { yellow, magenta, white, whiteBright, blueBright } from 'chalk';
 import chunk from '../Utils/Chunk';
+import { table } from 'table';
 
 namespace CardParser {
     /**
@@ -30,7 +31,7 @@ namespace CardParser {
 
     export const ParseCard = (card: Card, extraInfo = true): string => {
         const rarity = GetCardRarity(card.maxLevel);
-        let str = '[ ';
+        let str = '';
         switch (rarity) {
             case 0:
                 str += `${yellow('<')}${whiteBright(card.name)}${yellow('>')}`;
@@ -49,14 +50,10 @@ namespace CardParser {
                 break;
         }
         if (extraInfo) str += ` (${white(`lvl.${GetTrueCardLevel(card)}`)})`;
-        str += ' ]';
         return str;
     };
 
-    export const ParseDeck = (deck: Card[]): string =>
-        chunk<Card>(deck, 4)
-            .map((cc) => cc.map((c) => ParseCard(c)).join(' '))
-            .join('\n\n');
+    export const ParseDeck = (deck: Card[]): string => table(chunk(deck, 4).map((cc) => cc.map((c) => ParseCard(c))));
 }
 
 export default CardParser;
