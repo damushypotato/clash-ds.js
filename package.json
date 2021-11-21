@@ -1,6 +1,6 @@
 {
     "name": "clash-ds",
-    "version": "1.0.0",
+    "version": "1.3.0",
     "description": "Clash Royale Deck Sniper",
     "main": "dist/index.js",
     "scripts": {
