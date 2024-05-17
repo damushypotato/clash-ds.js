@@ -4,7 +4,7 @@ import chunk from '../Utils/Chunk';
 import { table } from 'table';
 
 namespace CardParser {
-    /**
+    /*
      * 0 - Champion,
      * 1 - Legendary,
      * 2 - Epic,
