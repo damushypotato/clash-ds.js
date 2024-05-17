@@ -27,7 +27,8 @@ namespace CardParser {
         }
     };
 
-    export const GetTrueCardLevel = (card: Card): Level => (14 - card.maxLevel + card.level) as Level;
+    export const GetTrueCardLevel = (card: Card): Level =>
+        (14 - card.maxLevel + card.level) as Level;
 
     export const ParseCard = (card: Card, extraInfo = true): string => {
         const rarity = GetCardRarity(card.maxLevel);
@@ -49,11 +50,12 @@ namespace CardParser {
                 str += whiteBright(card.name);
                 break;
         }
-        if (extraInfo) str += ` (${white(`lvl.${GetTrueCardLevel(card)}`)})`;
+        if (extraInfo) str += `\n(${white(`lvl.${GetTrueCardLevel(card)}`)})`;
         return str;
     };
 
-    export const ParseDeck = (deck: Card[]): string => table(chunk(deck, 4).map((cc) => cc.map((c) => ParseCard(c))));
+    export const ParseDeck = (deck: Card[]): string =>
+        table(chunk(deck, 4).map(cc => cc.map(c => ParseCard(c))));
 }
 
 export default CardParser;
