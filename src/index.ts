@@ -43,7 +43,9 @@ import CardParser from './Modules/CardParser';
         const str = `
 Sniped in ${greenBright(`${snipe.time}ms`)}
 
-Player: ${blue(snipe.player.name)} | Clan: ${blue(snipe.player.clan?.name || 'No clan')} | Trophies: ${yellow(snipe.player.trophies)}
+Player: ${blue(snipe.player.name)} | Clan: ${blue(
+            snipe.player.clan?.name || 'No clan'
+        )} | Trophies: ${yellow(snipe.player.trophies)}
 
 Deck:
 
@@ -52,7 +54,7 @@ ${CardParser.ParseDeck(snipe.player.currentDeck)}
         console.log(str);
     } else {
         console.log(
-            "Snipe failed. Maybe the clan/player wasn't found, or there was an API error. Make sure the clan name is more than 3 characters long, and also that the API Key in key.txt is correct."
+            "Snipe failed. Maybe the clan/player wasn't found, or there was an API error.\nMake sure the clan name is more than 3 characters long, and also that the API Key in key.txt is correct."
         );
     }
 
